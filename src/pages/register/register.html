@@ -1,0 +1,32 @@
+<ion-header >
+  <ion-navbar>
+    <ion-title>
+      Create Account
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding setScrollDisabled="true" >
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Full Name</ion-label>
+      <ion-input type="text" #displayName></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="text" #username></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password" #password></ion-input>
+    </ion-item>
+
+    <div padding>
+      <button ion-button block color="twitter" (click)="registerUser()">register</button>
+    </div>
+  </ion-list>
+</ion-content>
+
