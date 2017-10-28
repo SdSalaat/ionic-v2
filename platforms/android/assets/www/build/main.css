@@ -25512,6 +25512,45 @@ ion-navbar.toolbar {
   min-height: calc(46px + constant(safe-area-inset-top));
 }
 
+page-chat .innerMessage {
+  display: inline-block;
+  padding: 5px  10px;
+  background-color: #488aff;
+  color: white;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+page-chat .username {
+  font-weight: bold;
+  font-size: 100%;
+}
+
+page-chat .message {
+  font-size: 100%;
+  content: '';
+  display: block;
+  clear: both;
+}
+
+page-chat .messageLeft {
+  float: left;
+  background: #32db64;
+}
+
+page-chat .messageRight {
+  float: Right;
+  background: #488aff;
+}
+
+page-chat .element {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background: white;
+}
+
 page-home #topButtons {
   margin-top: 50%;
 }

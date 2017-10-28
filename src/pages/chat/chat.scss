@@ -1,0 +1,37 @@
+page-chat {
+  .innerMessage{
+    display: inline-block;
+    padding: 5px  10px;
+    background-color : #488aff;
+    color: white;
+    margin: 5px;
+    border-radius: 10px;
+  }
+
+  .username{
+    font-weight: bold;
+    font-size: 100%;
+  }
+
+  .message{
+    font-size: 100%;
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .messageLeft{
+    float: left;
+    background:#32db64;
+  }
+
+  .messageRight{
+    float: Right;
+    background: #488aff;
+  }
+
+  .element{
+    display: flex;
+    background:white;
+  }
+}

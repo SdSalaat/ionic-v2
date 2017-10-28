@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild  } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LoggedinPage } from '../loggedin/loggedin'
@@ -40,6 +40,11 @@ export class LoginPage {
     this.fire.auth.signInWithEmailAndPassword(this.username.value, this.password.value)
       .then(data =>{
         console.log(data);
+        let activeUser = {
+            "displayName": data.displayName,
+            "email": data.email
+        };
+        localStorage.setItem('activeUser', JSON.stringify(activeUser));
         this.alert("Suucessfully Logged In...");
         this.navCtrl.setRoot(LoggedinPage);
       })
