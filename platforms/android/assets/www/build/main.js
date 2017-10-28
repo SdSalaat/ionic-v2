@@ -50,14 +50,26 @@ var ChatPage = (function () {
         });
         this.message = '';
     };
+    ChatPage.prototype.ionViewWillLeave = function () {
+        console.log('user is about to Go');
+        this.subscription.unsubscribe();
+        this.db.list('/chat').push({
+            specialMessage: true,
+            message: this.activeUser.displayName + " has Left The Room"
+        });
+    };
     ChatPage.prototype.ionViewDidLoad = function () {
+        this.db.list('/chat').push({
+            specialMessage: true,
+            message: this.activeUser.displayName + " has Joined The Room"
+        });
         console.log('ionViewDidLoad ChatPage');
     };
     return ChatPage;
 }());
 ChatPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-chat',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/'<!--\n  Generated template for the ChatPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n    <ion-navbar>\n        <ion-title>chat</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n    <div id="chatMessages"></div>\n    <div class="message" *ngFor="let message of messages">\n        <div [class]=\'message.displayName == activeUser.displayName ? "innerMessage messageRight" : "innerMessage messageLeft" \' >\n            <div class="username">{{message.displayName}}</div>\n            <div class="message">{{message.message}}</div>\n        </div>\n    </div>\n</ion-content>\n\n<ion-footer>\n    <ion-toolbar>\n        <div class="element">\n            <ion-input ion-text type="text" [(ngModel)]="message" placeholder="Enter Your Message Here"> </ion-input>\n            <button ion-button icon-only (click)="sendMessage()" ><ion-icon name="ios-send"></ion-icon></button>\n        </div>\n    </ion-toolbar>\n</ion-footer>'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/,
+        selector: 'page-chat',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/'<!--\n  Generated template for the ChatPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n    <ion-navbar>\n        <ion-title>chat</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n    <div id="chatMessages"></div>\n    <div class="message" *ngFor="let message of messages" [class]="message.specialMessage ? \'message special\' : \'message\' ">\n        <div [class]=\'message.displayName == activeUser.displayName ? "innerMessage messageRight" : "innerMessage messageLeft" \' >\n            <div class="username">{{message.displayName}}</div>\n            <div class="message">{{message.message}}</div>\n        </div>\n    </div>\n</ion-content>\n\n<ion-footer>\n    <div class="element">\n        <ion-input ion-text type="text" [(ngModel)]="message" placeholder="Enter Your Message Here"> </ion-input>\n        <button ion-button icon-only (click)="sendMessage()" ><ion-icon name="ios-send"></ion-icon></button>\n    </div>\n</ion-footer>'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],

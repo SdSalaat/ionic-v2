@@ -30,8 +30,40 @@ page-chat {
     background: #488aff;
   }
 
+  ion-input{
+    font-size: 125%;
+  }
+
   .element{
     display: flex;
     background:white;
+  }
+
+  .message.special .innerMessage .message {
+    background: white;
+    display: inline-block;
+    padding: 0 10px;
+  }
+  .message.special .innerMessage:before {
+    content: '';
+    height: 2px;
+    background: #08f150;
+    display: block;
+    top: 50%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+  }
+  .message.special .innerMessage {
+    background: transparent;
+    color: black;
+    width: 100%;
+    font-size: 90%;
+    /* border: 1px solid; */
+    float: none;
+    text-align: center;
+    position: relative;
+
   }
 }

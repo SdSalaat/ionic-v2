@@ -25543,12 +25543,45 @@ page-chat .messageRight {
   background: #488aff;
 }
 
+page-chat ion-input {
+  font-size: 125%;
+}
+
 page-chat .element {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   background: white;
+}
+
+page-chat .message.special .innerMessage .message {
+  background: white;
+  display: inline-block;
+  padding: 0 10px;
+}
+
+page-chat .message.special .innerMessage:before {
+  content: '';
+  height: 2px;
+  background: #08f150;
+  display: block;
+  top: 50%;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+page-chat .message.special .innerMessage {
+  background: transparent;
+  color: black;
+  width: 100%;
+  font-size: 90%;
+  /* border: 1px solid; */
+  float: none;
+  text-align: center;
+  position: relative;
 }
 
 page-home #topButtons {

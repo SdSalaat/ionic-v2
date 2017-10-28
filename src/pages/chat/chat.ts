@@ -44,8 +44,20 @@ export class ChatPage {
         this.message = '';
     }
 
-    ionViewDidLoad() {
+    ionViewWillLeave(){
+        console.log('user is about to Go');
+        this.subscription.unsubscribe();
+        this.db.list('/chat').push({
+            specialMessage: true,
+            message: `${this.activeUser.displayName} has Left The Room`
+        });
+    }
 
+    ionViewDidLoad() {
+        this.db.list('/chat').push({
+            specialMessage: true,
+            message: `${this.activeUser.displayName} has Joined The Room`
+        });
         console.log('ionViewDidLoad ChatPage');
     }
 
