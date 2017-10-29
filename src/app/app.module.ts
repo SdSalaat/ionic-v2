@@ -10,6 +10,8 @@ import { RegisterPage } from '../pages/register/register';
 import { LoginPage } from '../pages/login/login';
 import { LoggedinPage } from '../pages/loggedin/loggedin';
 import { ChatPage } from '../pages/chat/chat';
+import { RoomsPage } from '../pages/rooms/rooms';
+import { CreateRoomPage } from '../pages/create-room/create-room';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -30,7 +32,9 @@ const firebaseAuth = {
         RegisterPage,
         LoginPage,
         LoggedinPage,
-        ChatPage
+        ChatPage,
+        RoomsPage,
+        CreateRoomPage
     ],
     imports: [
         BrowserModule,
@@ -46,7 +50,9 @@ const firebaseAuth = {
         RegisterPage,
         LoginPage,
         LoggedinPage,
-        ChatPage
+        ChatPage,
+        RoomsPage,
+        CreateRoomPage
     ],
     providers: [
         StatusBar,

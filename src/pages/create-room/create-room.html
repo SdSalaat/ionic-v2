@@ -1,0 +1,34 @@
+<!--
+  Generated template for the CreateRoomPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Create Room</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label stacked>Room Name</ion-label>
+      <ion-input type="text" placeholder="Enter Room Name" #roomName></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Room Password</ion-label>
+      <ion-input type="password" placeholder="Enter Room Password" #roomPassword></ion-input>
+    </ion-item>
+
+      <button ion-button color="dark" (click)="createRoom()">Create Room</button>
+  </ion-list>
+
+
+</ion-content>

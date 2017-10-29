@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { ChatPage } from '../chat/chat';
+import { RoomsPage } from '../rooms/rooms';
 
 /**
  * Generated class for the LoggedinPage page.
@@ -43,7 +43,7 @@ export class LoggedinPage {
     }
 
     goChatting(){
-        this.navCtrl.push(ChatPage)
+        this.navCtrl.push(RoomsPage)
     }
 
 
