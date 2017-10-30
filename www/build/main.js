@@ -1,12 +1,13 @@
 webpackJsonp([6],{
 
-/***/ 132:
+/***/ 133:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateRoomPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChatPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(65);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,6 +19,88 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
+/**
+ * Generated class for the ChatPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var ChatPage = (function () {
+    function ChatPage(db, navCtrl, navParams) {
+        var _this = this;
+        this.db = db;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.activeUser = JSON.parse(localStorage.getItem('activeUser'));
+        this.displayName = "";
+        this.message = "";
+        this.messages = [];
+        this.keyword = this.navParams.data.keyword;
+        this.subscription = this.db.list('/rooms/' + this.keyword).valueChanges().subscribe(function (data) {
+            _this.messages = data;
+        });
+    }
+    ChatPage.prototype.sendMessage = function () {
+        this.db.list('/rooms/' + this.keyword).push({
+            displayName: this.activeUser.displayName,
+            message: this.message
+        })
+            .then(function () {
+            //Message Sent...
+        });
+        this.message = '';
+    };
+    ChatPage.prototype.ionViewWillLeave = function () {
+        console.log('user is about to Go');
+        this.subscription.unsubscribe();
+        this.db.list('/rooms/' + this.keyword).push({
+            specialMessage: true,
+            message: this.activeUser.displayName + " has Left The Room"
+        });
+    };
+    ChatPage.prototype.ionViewDidLoad = function () {
+        this.db.list('/rooms/' + this.keyword).push({
+            specialMessage: true,
+            message: this.activeUser.displayName + " has Joined The Room"
+        });
+        console.log('ionViewDidLoad ChatPage');
+    };
+    return ChatPage;
+}());
+ChatPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-chat',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/'<!--\n  Generated template for the ChatPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n    <ion-navbar>\n        <ion-title>{{keyword}} Chat Room</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n    <div id="chatMessages"></div>\n    <div class="message" *ngFor="let message of messages" [class]="message.specialMessage ? \'message special\' : \'message\' ">\n        <div [class]=\'message.displayName == activeUser.displayName ? "innerMessage messageRight" : "innerMessage messageLeft" \' >\n            <div class="username">{{message.displayName}}</div>\n            <div class="message">{{message.message}}</div>\n        </div>\n    </div>\n</ion-content>\n\n<ion-footer>\n    <div class="element">\n        <ion-input ion-text type="text" [(ngModel)]="message" placeholder="Enter Your Message Here"> </ion-input>\n        <button ion-button icon-only (click)="sendMessage()" ><ion-icon name="ios-send"></ion-icon></button>\n    </div>\n</ion-footer>'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
+], ChatPage);
+
+//# sourceMappingURL=chat.js.map
+
+/***/ }),
+
+/***/ 134:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateRoomPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(65);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
 /**
  * Generated class for the CreateRoomPage page.
  *
@@ -25,33 +108,51 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var CreateRoomPage = (function () {
-    function CreateRoomPage(navCtrl, navParams, viewCtrl) {
+    function CreateRoomPage(navCtrl, navParams, viewCtrl, db) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.viewCtrl = viewCtrl;
+        this.db = db;
+        this.activeUser = JSON.parse(localStorage.getItem('activeUser'));
         this.errorMsg = '';
+        this.message = "";
     }
     CreateRoomPage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad CreateRoomPage');
     };
     CreateRoomPage.prototype.createRoom = function () {
+        var _this = this;
         var a = this.roomPassword.value.length;
         if (a < 4) {
-            this.errorMsg = "Password Shoud Contain atleast five characters";
+            this.errorMsg = "Password Should Contain at least five characters";
         }
         else {
             if (/[0-9]/.test(this.roomPassword.value) == false) {
-                this.errorMsg = "Password Shoud Contain numbers Only";
+                this.errorMsg = "Password Should Contain numbers Only";
             }
             else {
-                var obj = {
+                var obj_1 = {
                     'roomName': this.roomName.value,
                     'roomPassword': this.roomPassword.value
                 };
-                console.log(obj);
-                /*this.viewCtrl.dismiss(obj);*/
+                console.log(obj_1);
+                var d = new Date();
+                var n = d.toUTCString();
+                this.db.list('rooms/' + obj_1.roomName).push({
+                    roomPassword: this.roomPassword.value,
+                    displayName: this.activeUser.displayName,
+                    specialMessage: true,
+                    message: this.activeUser.displayName + " creates group on \n " + n
+                })
+                    .then(function () {
+                    //Message Sent...
+                    _this.viewCtrl.dismiss(obj_1);
+                });
             }
         }
+    };
+    CreateRoomPage.prototype.closeModal = function () {
+        this.viewCtrl.dismiss();
     };
     return CreateRoomPage;
 }());
@@ -65,25 +166,27 @@ __decorate([
 ], CreateRoomPage.prototype, "roomPassword", void 0);
 CreateRoomPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-create-room',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/create-room/create-room.html"*/'<!--\n  Generated template for the CreateRoomPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Create Room</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n  <ion-list>\n\n    <ion-item>\n      <ion-label stacked>Room Name</ion-label>\n      <ion-input type="text" placeholder="Enter Room Name" #roomName></ion-input>\n    </ion-item>\n\n    <ion-item>\n      <ion-label stacked>Room Password</ion-label>\n      <ion-input type="password" placeholder="Enter Room Password" #roomPassword></ion-input>\n    </ion-item>\n\n      <button ion-button color="dark" (click)="createRoom()">Create Room</button>\n  </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/create-room/create-room.html"*/,
+        selector: 'page-create-room',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/create-room/create-room.html"*/'<!--\n  Generated template for the CreateRoomPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Create Room\n    <div style="float: right;" (click)="closeModal()" >close</div>\n    </ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n  <ion-list>\n\n      <div padding>\n          <p><b>{{errorMsg}}</b></p>\n      </div>\n\n    <ion-item>\n      <ion-label stacked>Room Name</ion-label>\n      <ion-input type="text" placeholder="Enter Room Name" #roomName></ion-input>\n    </ion-item>\n\n    <ion-item>\n      <ion-label stacked>Room Password</ion-label>\n      <ion-input type="password" placeholder="Enter Room Password" #roomPassword></ion-input>\n    </ion-item>\n  </ion-list>\n\n    <button block ion-button color="dark" (click)="createRoom()">Create Room</button>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/create-room/create-room.html"*/,
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
+        __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */]])
 ], CreateRoomPage);
 
-var _a, _b, _c;
 //# sourceMappingURL=create-room.js.map
 
 /***/ }),
 
-/***/ 133:
+/***/ 135:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoggedinPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__rooms_rooms__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__rooms_rooms__ = __webpack_require__(136);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -143,14 +246,18 @@ LoggedinPage = __decorate([
 
 /***/ }),
 
-/***/ 134:
+/***/ 136:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RoomsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_room_create_room__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(410);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__chat_chat__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__create_room_create_room__ = __webpack_require__(134);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -163,6 +270,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
 /**
  * Generated class for the RoomsPage page.
  *
@@ -170,40 +280,106 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var RoomsPage = (function () {
-    function RoomsPage(navCtrl, navParams, modalCtrl) {
+    function RoomsPage(navCtrl, navParams, modalCtrl, alertCtrl, db) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.modalCtrl = modalCtrl;
+        this.alertCtrl = alertCtrl;
+        this.db = db;
+        this.rooms = [];
+        this.messages = [];
     }
     RoomsPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad RoomsPage');
+        var _this = this;
+        this.subscription = this.db.object('/rooms').valueChanges().subscribe(function (data) {
+            if (data != null) {
+                var arrObj_1 = [];
+                var obj = JSON.stringify(data, function (key, value) {
+                    arrObj_1.push(value);
+                });
+                _this.roomsData = arrObj_1;
+                _this.rooms = [];
+                console.log(_this.roomsData);
+                var array = Object.keys(data).map(function (k) { return _this.rooms.push(k); });
+            }
+        });
     };
     RoomsPage.prototype.openModal = function () {
-        var myModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__create_room_create_room__["a" /* CreateRoomPage */]);
+        var _this = this;
+        var myModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_5__create_room_create_room__["a" /* CreateRoomPage */]);
+        myModal.onDidDismiss(function (data) {
+            _this.subscription = _this.db.object('/rooms').valueChanges().subscribe(function (data) {
+                _this.roomsData = data;
+                _this.rooms = [];
+                console.log(_this.roomsData);
+                var array = Object.keys(data).map(function (k) { return _this.rooms.push(k); });
+            });
+        });
         myModal.present();
+    };
+    RoomsPage.prototype.itemSelected = function (keyword) {
+        var _this = this;
+        console.log(keyword);
+        this.subscription = this.db.list('rooms/' + keyword).valueChanges().subscribe(function (data) {
+            _this.messages = data;
+            console.log(_this.messages);
+        });
+        var prompt = this.alertCtrl.create({
+            title: 'Login',
+            message: "Enter password For Room Entrance",
+            inputs: [
+                {
+                    name: 'password',
+                    placeholder: 'Enter Password'
+                },
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    handler: function (data) {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Save',
+                    handler: function (data) {
+                        var a = __WEBPACK_IMPORTED_MODULE_1_lodash__["findIndex"](_this.messages, function (o) { return o.roomPassword == data.password; });
+                        if (a != -1) {
+                            var groupName = { "keyword": keyword };
+                            _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__chat_chat__["a" /* ChatPage */], groupName);
+                        }
+                    }
+                }
+            ]
+        });
+        prompt.present();
     };
     return RoomsPage;
 }());
 RoomsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-rooms',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/rooms/rooms.html"*/'<!--\n  Generated template for the RoomsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>rooms\n      <button style="float: right;" ion-button color="twitter" (click)="openModal()"><ion-icon name="md-add-circle"></ion-icon></button>\n    </ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <p><b><i>Come Here Idiot</i></b></p>\n</ion-content>\n'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/rooms/rooms.html"*/,
+        selector: 'page-rooms',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/rooms/rooms.html"*/'<!--\n  Generated template for the RoomsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Rooms\n      <!--<button style="float: right;" ion-button color="twitter" (click)="openModal()"><ion-icon name="md-add-circle"></ion-icon></button>-->\n        <div style="float: right;" (click)="openModal()" >Create Room</div>\n    </ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n    <ion-list inset>\n        <button ion-item *ngFor="let keyword of rooms"  (click)="itemSelected(keyword)">\n            <b>{{ keyword }}</b>\n        </button>\n    </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/rooms/rooms.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* ModalController */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["g" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["f" /* ModalController */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */]])
 ], RoomsPage);
 
 //# sourceMappingURL=rooms.js.map
 
 /***/ }),
 
-/***/ 135:
+/***/ 137:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loggedin_loggedin__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loggedin_loggedin__ = __webpack_require__(135);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -280,14 +456,14 @@ LoginPage = __decorate([
 
 /***/ }),
 
-/***/ 136:
+/***/ 138:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RegisterPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(73);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -355,7 +531,7 @@ RegisterPage = __decorate([
 
 /***/ }),
 
-/***/ 146:
+/***/ 148:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -368,36 +544,36 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 146;
+webpackEmptyAsyncContext.id = 148;
 
 /***/ }),
 
-/***/ 189:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"../pages/chat/chat.module": [
-		436,
+		438,
 		5
 	],
 	"../pages/create-room/create-room.module": [
-		437,
+		439,
 		4
 	],
 	"../pages/loggedin/loggedin.module": [
-		438,
+		440,
 		3
 	],
 	"../pages/login/login.module": [
-		439,
+		441,
 		2
 	],
 	"../pages/register/register.module": [
-		440,
+		442,
 		1
 	],
 	"../pages/rooms/rooms.module": [
-		441,
+		443,
 		0
 	]
 };
@@ -412,20 +588,20 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 189;
+webpackAsyncContext.id = 191;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 283:
+/***/ 284:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login_login__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__register_register__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login_login__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__register_register__ = __webpack_require__(138);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -463,86 +639,6 @@ HomePage = __decorate([
 
 /***/ }),
 
-/***/ 284:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChatPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(190);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-/**
- * Generated class for the ChatPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var ChatPage = (function () {
-    function ChatPage(db, navCtrl, navParams) {
-        var _this = this;
-        this.db = db;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.activeUser = JSON.parse(localStorage.getItem('activeUser'));
-        this.displayName = "";
-        this.message = "";
-        this.messages = [];
-        this.subscription = this.db.list('/chat').valueChanges().subscribe(function (data) {
-            _this.messages = data;
-        });
-    }
-    ChatPage.prototype.sendMessage = function () {
-        this.db.list('/chat').push({
-            displayName: this.activeUser.displayName,
-            message: this.message
-        })
-            .then(function () {
-            //Message Sent...
-        });
-        this.message = '';
-    };
-    ChatPage.prototype.ionViewWillLeave = function () {
-        console.log('user is about to Go');
-        this.subscription.unsubscribe();
-        this.db.list('/chat').push({
-            specialMessage: true,
-            message: this.activeUser.displayName + " has Left The Room"
-        });
-    };
-    ChatPage.prototype.ionViewDidLoad = function () {
-        this.db.list('/chat').push({
-            specialMessage: true,
-            message: this.activeUser.displayName + " has Joined The Room"
-        });
-        console.log('ionViewDidLoad ChatPage');
-    };
-    return ChatPage;
-}());
-ChatPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-chat',template:/*ion-inline-start:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/'<!--\n  Generated template for the ChatPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n    <ion-navbar>\n        <ion-title>chat</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n    <div id="chatMessages"></div>\n    <div class="message" *ngFor="let message of messages" [class]="message.specialMessage ? \'message special\' : \'message\' ">\n        <div [class]=\'message.displayName == activeUser.displayName ? "innerMessage messageRight" : "innerMessage messageLeft" \' >\n            <div class="username">{{message.displayName}}</div>\n            <div class="message">{{message.message}}</div>\n        </div>\n    </div>\n</ion-content>\n\n<ion-footer>\n    <div class="element">\n        <ion-input ion-text type="text" [(ngModel)]="message" placeholder="Enter Your Message Here"> </ion-input>\n        <button ion-button icon-only (click)="sendMessage()" ><ion-icon name="ios-send"></ion-icon></button>\n    </div>\n</ion-footer>'/*ion-inline-end:"/home/asamad/Desktop/WorkSpace/ionic-v2/src/pages/chat/chat.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
-], ChatPage);
-
-//# sourceMappingURL=chat.js.map
-
-/***/ }),
-
 /***/ 285:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -562,22 +658,22 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(279);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(282);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(435);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(283);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_register_register__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_login_login__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_loggedin_loggedin__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_chat_chat__ = __webpack_require__(284);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_rooms_rooms__ = __webpack_require__(134);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_create_room_create_room__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_angularfire2__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_angularfire2_auth__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angularfire2_database__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(437);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(284);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_register_register__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_login_login__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_loggedin_loggedin__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_chat_chat__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_rooms_rooms__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_create_room_create_room__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_angularfire2__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_angularfire2_auth__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angularfire2_database__ = __webpack_require__(65);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -664,16 +760,16 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 435:
+/***/ 437:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(282);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(279);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(284);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);

@@ -7,7 +7,9 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Create Room</ion-title>
+    <ion-title>Create Room
+    <div style="float: right;" (click)="closeModal()" >close</div>
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -16,6 +18,10 @@
 <ion-content padding>
 
   <ion-list>
+
+      <div padding>
+          <p><b>{{errorMsg}}</b></p>
+      </div>
 
     <ion-item>
       <ion-label stacked>Room Name</ion-label>
@@ -26,9 +32,9 @@
       <ion-label stacked>Room Password</ion-label>
       <ion-input type="password" placeholder="Enter Room Password" #roomPassword></ion-input>
     </ion-item>
-
-      <button ion-button color="dark" (click)="createRoom()">Create Room</button>
   </ion-list>
+
+    <button block ion-button color="dark" (click)="createRoom()">Create Room</button>
 
 
 </ion-content>

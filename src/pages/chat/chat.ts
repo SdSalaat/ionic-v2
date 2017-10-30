@@ -21,20 +21,22 @@ export class ChatPage {
     message : string = "";
     subscription: any;
     messages: object[] = [];
+    keyword : any;
 
     constructor(
         public db:AngularFireDatabase,
         public navCtrl: NavController,
         public navParams: NavParams) {
 
-        this.subscription = this.db.list('/chat').valueChanges().subscribe(data =>{
+        this.keyword = this.navParams.data.keyword;
+        this.subscription = this.db.list('/rooms/'+ this.keyword).valueChanges().subscribe(data =>{
             this.messages = data;
         });
 
     }
 
     sendMessage(){
-        this.db.list('/chat').push({
+        this.db.list('/rooms/'+ this.keyword).push({
             displayName: this.activeUser.displayName,
             message: this.message
         })
@@ -47,14 +49,14 @@ export class ChatPage {
     ionViewWillLeave(){
         console.log('user is about to Go');
         this.subscription.unsubscribe();
-        this.db.list('/chat').push({
+        this.db.list('/rooms/'+ this.keyword).push({
             specialMessage: true,
             message: `${this.activeUser.displayName} has Left The Room`
         });
     }
 
     ionViewDidLoad() {
-        this.db.list('/chat').push({
+        this.db.list('/rooms/'+ this.keyword).push({
             specialMessage: true,
             message: `${this.activeUser.displayName} has Joined The Room`
         });
