@@ -3,10 +3,8 @@
 # http://git-scm.com/docs/gitignore
 
 
+# Dependency directory
 node_modules/
-
 platforms/
-
 plugins/
-
 .idea/
