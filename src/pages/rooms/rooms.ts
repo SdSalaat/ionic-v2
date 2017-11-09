@@ -1,7 +1,7 @@
 import { Component} from '@angular/core';
 import * as _ from 'lodash';
 import { AngularFireDatabase} from 'angularfire2/database';
-import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, ActionSheetController, NavParams, ModalController, AlertController } from 'ionic-angular';
 import { ChatPage } from '../chat/chat'
 
 
@@ -32,6 +32,7 @@ export class RoomsPage {
                 public modalCtrl: ModalController,
                 public alertCtrl: AlertController,
                 public db:AngularFireDatabase,
+                public actionSheetCtrl:ActionSheetController,
     ) {
     }
 
@@ -41,7 +42,7 @@ export class RoomsPage {
 
                 let arrObj = [];
                 let obj = JSON.stringify(data, function(key, value) {
-                   arrObj.push(value);
+                    arrObj.push(value);
                 });
                 this.roomsData = arrObj;
 
@@ -69,9 +70,37 @@ export class RoomsPage {
 
 
     itemSelected(keyword){
+
+        let actionSheet = this.actionSheetCtrl.create({
+            title: 'What do you want to do',
+
+            buttons: [
+
+                {
+                    text: 'Enter Room Password',
+                    handler: () => {
+                        this.enterRoom(keyword);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                }
+            ]
+        });
+        actionSheet.present();
+    }
+
+
+
+
+    enterRoom(keyword){
         console.log(keyword);
 
-        this.subscription = this.db.list('rooms/' + keyword).valueChanges().subscribe(data =>{
+        this.subscription = this.db.list('rooms/' + keyword).valueChanges().subscribe(data => {
             this.messages = data;
             console.log(this.messages);
         });
@@ -96,10 +125,20 @@ export class RoomsPage {
                 {
                     text: 'Save',
                     handler: data => {
-                        let a = _.findIndex(this.messages, function(o) { return o.roomPassword == data.password ; });
-                        if(a != -1){
-                            let groupName = {"keyword" : keyword}
+                        let a = _.findIndex(this.messages, function (o) {
+                            return o.roomPassword == data.password;
+                        });
+                        if (a != -1) {
+                            let groupName = {"keyword": keyword};
                             this.navCtrl.push(ChatPage, groupName);
+                        }
+                        else{
+                            let alert = this.alertCtrl.create({
+                                title: 'Incorrect Password..!',
+                                subTitle: 'You Entered Incorrect Password!',
+                                buttons: ['OK']
+                            });
+                            alert.present();
                         }
                     }
                 }
@@ -107,5 +146,4 @@ export class RoomsPage {
         });
         prompt.present();
     }
-
 }

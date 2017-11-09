@@ -9,7 +9,7 @@
   <ion-navbar>
     <ion-title>Rooms
       <!--<button style="float: right;" ion-button color="twitter" (click)="openModal()"><ion-icon name="md-add-circle"></ion-icon></button>-->
-        <div style="float: right;" (click)="openModal()" >Create Room</div>
+        <div  style=" color: #8db5fc; float: right;" (click)="openModal()" >Create Room</div>
     </ion-title>
   </ion-navbar>
 
@@ -18,8 +18,8 @@
 
 <ion-content padding>
 
-    <ion-list inset>
-        <button ion-item *ngFor="let keyword of rooms"  (click)="itemSelected(keyword)">
+    <ion-list>
+        <button ion-item *ngFor="let keyword of rooms" (click)="itemSelected(keyword)">
             <b>{{ keyword }}</b>
         </button>
     </ion-list>
